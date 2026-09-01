@@ -27,6 +27,13 @@
 
 <body>
 
+  <div class="video-modal" aria-hidden="true">
+    <div class="video-modal__backdrop" data-video-close></div>
+    <div class="video-modal__content" role="dialog" aria-modal="true" aria-label="Portfolio animation">
+      <video class="video-modal__video" src="./assets/images/PNG.mp4" muted playsinline></video>
+    </div>
+  </div>
+
   <!--
     - #MAIN
   -->
@@ -307,45 +314,63 @@
 
           <h3 class="h3 events-title">Events</h3>
 
-          <ul class="events-list has-scrollbar">
+          <div class="events-marquee" aria-label="Event services carousel">
+            <div class="events-track">
+              <div class="events-item">
+                <div class="event-card">
+                  <p>Whole Event Coverage</p>
+                </div>
+              </div>
 
-            <li class="events-item">
-              <a href="#">
-                <p>Whole Event Coverage</p>
-              </a>
-            </li>
+              <div class="events-item">
+                <div class="event-card">
+                  <p>Birthday Party</p>
+                </div>
+              </div>
 
-            <li class="events-item">
-              <a href="#">
-                <p>Birthday Party</p>
-              </a>
-            </li>
+              <div class="events-item">
+                <div class="event-card">
+                  <p>Wedding Coverage</p>
+                </div>
+              </div>
 
-            <li class="events-item">
-              <a href="#">
-                <p>Weeding Coverage</p>
-              </a>
-            </li>
+              <div class="events-item">
+                <div class="event-card">
+                  <p>Same Day Edit</p>
+                </div>
+              </div>
 
-            <li class="events-item">
-              <a href="#">
-                <img src="./assets/images/logo-4-color.png" alt="client logo">
-              </a>
-            </li>
+              <div class="events-item">
+                <div class="event-card">
+                  <p>Prenup Shoot</p>
+                </div>
+              </div>
 
-            <li class="events-item">
-              <a href="#">
-                <img src="./assets/images/logo-5-color.png" alt="client logo">
-              </a>
-            </li>
+              <div class="events-item">
+                <div class="event-card">
+                  <p>Photo Booth</p>
+                </div>
+              </div>
 
-            <li class="events-item">
-              <a href="#">
-                <img src="./assets/images/logo-6-color.png" alt="client logo">
-              </a>
-            </li>
+              <div class="events-item">
+                <div class="event-card">
+                  <p>Corporate Event Coverage</p>
+                </div>
+              </div>
 
-          </ul>
+              <div class="events-item">
+                <div class="event-card">
+                  <p>Food Photography</p>
+                </div>
+              </div>
+
+              <div class="events-item">
+                <div class="event-card">
+                  <p>Event Highlights Video</p>
+                </div>
+              </div>
+            </div>
+          </div>
 
         </section>
 
