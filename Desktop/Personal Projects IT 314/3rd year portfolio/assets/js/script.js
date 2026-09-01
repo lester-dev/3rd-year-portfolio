@@ -165,6 +165,8 @@ const openVideoModal = function () {
 
   videoModalVideo.pause();
   videoModalVideo.currentTime = 0;
+  videoModalVideo.muted = false;
+  videoModalVideo.volume = 1;
   videoModalVideo.playbackRate = 1.35;
 
   const playPromise = videoModalVideo.play();

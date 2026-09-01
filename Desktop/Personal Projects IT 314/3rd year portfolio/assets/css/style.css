@@ -682,6 +682,17 @@ main {
   object-fit: cover;
   object-position: center;
   background: #000;
+  pointer-events: none;
+}
+
+.video-modal__video::-webkit-media-controls,
+.video-modal__video::-webkit-media-controls-panel,
+.video-modal__video::-webkit-media-controls-enclosure,
+.video-modal__video::-webkit-media-controls-overlay-play-button,
+.video-modal__video::-webkit-media-controls-start-playback-button {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
 }
 
 body.video-modal-open {
