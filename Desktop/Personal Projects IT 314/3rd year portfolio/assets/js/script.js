@@ -66,9 +66,9 @@ for (let i = 0; i < selectItems.length; i++) {
   });
 }
 
-const filterItems = document.querySelectorAll("[data-filter-item]");
-
 const filterFunc = function (selectedValue) {
+  const filterItems = document.querySelectorAll("[data-filter-item]");
+
   for (let i = 0; i < filterItems.length; i++) {
     if (selectedValue === "all") {
       filterItems[i].classList.add("active");
@@ -84,6 +84,7 @@ if (filterBtn.length > 0) {
   let lastClickedBtn = filterBtn[0];
 
   for (let i = 0; i < filterBtn.length; i++) {
+
     filterBtn[i].addEventListener("click", function () {
       let selectedValue = this.innerText.toLowerCase();
 
@@ -99,6 +100,113 @@ if (filterBtn.length > 0) {
     });
   }
 }
+
+const driftWalls = document.querySelectorAll("[data-drift-wall]");
+
+driftWalls.forEach((wall) => {
+  const sourceItems = Array.from(wall.querySelectorAll(".project-item:not([data-drift-clone])"));
+  const columnCount = window.matchMedia("(max-width: 767px)").matches ? 2 : 4;
+  const plane = document.createElement("div");
+
+  plane.className = "drift-wall__plane";
+
+  const columns = Array.from({ length: columnCount }, () => {
+    const column = document.createElement("div");
+    const track = document.createElement("div");
+
+    column.className = "drift-wall__col";
+    track.className = "drift-wall__track";
+    column.appendChild(track);
+    plane.appendChild(column);
+
+    return track;
+  });
+
+  sourceItems.forEach((item, index) => {
+    const track = columns[index % columnCount];
+    const clone = item.cloneNode(true);
+
+    clone.setAttribute("aria-hidden", "true");
+    clone.dataset.driftClone = "true";
+    clone.querySelectorAll("a").forEach((link) => link.setAttribute("tabindex", "-1"));
+    track.appendChild(item);
+    track.appendChild(clone);
+  });
+
+  wall.replaceChildren(plane);
+
+  wall.addEventListener("pointermove", (event) => {
+    const bounds = wall.getBoundingClientRect();
+    const x = ((event.clientX - bounds.left) / bounds.width - 0.5) * 8;
+    const y = ((event.clientY - bounds.top) / bounds.height - 0.5) * -8;
+
+    plane.style.transform = `translate(-50%, -50%) scale(1.08) rotateX(${14 + y}deg) rotateY(${-12 + x}deg) translateZ(-100px)`;
+  });
+
+  wall.addEventListener("pointerleave", () => {
+    plane.style.transform = "translate(-50%, -50%) scale(1.08) rotateX(14deg) rotateY(-12deg) translateZ(-100px)";
+  });
+});
+
+const projectModal = document.querySelector("[data-project-modal]");
+const projectModalImage = document.querySelector("[data-project-image]");
+const projectModalCategory = document.querySelector("[data-project-category]");
+const projectModalTitle = document.querySelector("[data-project-title]");
+const projectModalDescription = document.querySelector("[data-project-description]");
+const projectModalCloseButtons = document.querySelectorAll("[data-project-close]");
+const projectModalDescriptions = {
+  "Web development": "A web development concept focused on clear structure, responsive layouts, and an engaging visual experience.",
+  "Web design": "A visual design study exploring composition, typography, color, and the relationship between interface and content.",
+  Applications: "An application concept designed around focused interactions, useful information, and a polished user experience."
+};
+
+const closeProjectModal = function () {
+  if (!projectModal) return;
+
+  projectModal.classList.remove("active");
+  projectModal.setAttribute("aria-hidden", "true");
+};
+
+const openProjectModal = function (item) {
+  if (!projectModal || !projectModalImage || !projectModalTitle || !projectModalCategory || !projectModalDescription) return;
+
+  const image = item.querySelector(".project-img img");
+  const title = item.querySelector(".project-title");
+  const category = item.querySelector(".project-category");
+
+  if (!image || !title || !category) return;
+
+  projectModalImage.src = image.src;
+  projectModalImage.alt = image.alt;
+  projectModalTitle.textContent = title.textContent.trim();
+  projectModalCategory.textContent = category.textContent.trim();
+  projectModalDescription.textContent = projectModalDescriptions[category.textContent.trim()] || "A portfolio project exploring thoughtful visual communication and digital craft.";
+  projectModal.classList.add("active");
+  projectModal.setAttribute("aria-hidden", "false");
+
+  const closeButton = projectModal.querySelector(".project-modal__close");
+  if (closeButton) closeButton.focus();
+};
+
+driftWalls.forEach((wall) => {
+  wall.addEventListener("click", (event) => {
+    const link = event.target.closest(".project-item:not([data-drift-clone]) > a");
+    if (!link) return;
+
+    event.preventDefault();
+    openProjectModal(link.closest(".project-item"));
+  });
+});
+
+projectModalCloseButtons.forEach((button) => {
+  button.addEventListener("click", closeProjectModal);
+});
+
+document.addEventListener("keydown", function (event) {
+  if (event.key === "Escape" && projectModal && projectModal.classList.contains("active")) {
+    closeProjectModal();
+  }
+});
 
 const eventTrack = document.querySelector(".events-track");
 
