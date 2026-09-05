@@ -239,6 +239,21 @@
     }
 
     @media (max-width: 600px) {
+      html,
+      body {
+        min-height: 100%;
+        height: auto;
+        overflow-x: hidden;
+        overflow-y: auto;
+      }
+
+      .home {
+        min-height: 100svh;
+        height: auto;
+        overflow: visible;
+        padding: 24px 20px 20px;
+      }
+
       .intro {
         display: block;
       }
@@ -249,12 +264,18 @@
       }
 
       .camera-stage {
-        min-height: 52vh;
+        min-height: 0;
+        padding: clamp(20px, 6vh, 40px) 0;
       }
 
       .camera-wrap {
-        width: min(116vw, 70vh);
-        max-width: none;
+        width: min(100%, 70vh);
+        max-width: 100%;
+      }
+
+      .ok-hotspot {
+        min-width: 44px;
+        min-height: 44px;
       }
 
       .footer {
