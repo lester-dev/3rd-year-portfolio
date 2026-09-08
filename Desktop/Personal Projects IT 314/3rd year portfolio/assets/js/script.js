@@ -146,6 +146,18 @@ const photographDates = {
   "untitled-80.JPG": "2026-04-04"
 };
 const photographImages = [
+  "18.png",
+  "18th.png",
+  "5 man 2.0.png",
+  "5 man.png",
+  "Champion.png",
+  "eight.png",
+  "eighteen.png",
+  "IT 1101 Jaguar.png",
+  "Jiro.png",
+  "quadro 2.0.png",
+  "Quadro.png",
+  "Screenshot 2026-09-08 232131.png",
   "IMG_6803-2.JPG",
   "IMG_6779.JPG",
   "IMG_5359-Enhanced-NR.JPG",
@@ -213,7 +225,7 @@ if (photographGallery) {
     iconElement.setAttribute("name", "eye-outline");
     image.src = link.href;
     image.alt = `Photograph ${index + 1}`;
-    image.loading = "lazy";
+    image.loading = "eager";
     title.className = "project-title";
     title.textContent = fileName;
     category.className = "project-category";
@@ -231,6 +243,7 @@ const driftWalls = document.querySelectorAll("[data-drift-wall]");
 
 driftWalls.forEach((wall) => {
   const sourceItems = Array.from(wall.querySelectorAll(".project-item:not([data-drift-clone])"));
+  const isPhotographWall = wall.hasAttribute("data-photograph-gallery");
   const columnCount = window.matchMedia("(max-width: 767px)").matches ? 2 : 4;
   const plane = document.createElement("div");
 
@@ -250,7 +263,7 @@ driftWalls.forEach((wall) => {
 
   sourceItems.forEach((item, index) => {
     const track = columns[index % columnCount];
-    if (wall.hasAttribute("data-no-duplicate")) {
+    if (wall.hasAttribute("data-no-duplicate") || isPhotographWall) {
       track.appendChild(item);
       return;
     }
@@ -265,6 +278,47 @@ driftWalls.forEach((wall) => {
   });
 
   wall.replaceChildren(plane);
+
+  if (isPhotographWall) {
+    const offsets = columns.map(() => 0);
+    let lastTimestamp = null;
+
+    columns.forEach((track) => {
+      track.style.animation = "none";
+    });
+
+    const animatePhotographs = (timestamp) => {
+      if (lastTimestamp === null) lastTimestamp = timestamp;
+      const delta = Math.min(0.05, (timestamp - lastTimestamp) / 1000);
+      lastTimestamp = timestamp;
+      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      if (!reducedMotion) {
+        columns.forEach((track, index) => {
+          const item = track.firstElementChild;
+          if (!item) return;
+
+          const itemHeight = item.getBoundingClientRect().height;
+          const direction = index % 2 === 0 ? 1 : -1;
+          offsets[index] += 32 * delta * direction;
+
+          if (direction > 0 && offsets[index] >= itemHeight) {
+            track.appendChild(item);
+            offsets[index] -= itemHeight;
+          } else if (direction < 0 && offsets[index] <= -itemHeight) {
+            track.insertBefore(track.lastElementChild, track.firstElementChild);
+            offsets[index] += itemHeight;
+          }
+
+          track.style.transform = `translate3d(0, ${-offsets[index]}px, 0)`;
+        });
+      }
+
+      requestAnimationFrame(animatePhotographs);
+    };
+
+    requestAnimationFrame(animatePhotographs);
+  }
 
   wall.addEventListener("pointermove", (event) => {
     const bounds = wall.getBoundingClientRect();

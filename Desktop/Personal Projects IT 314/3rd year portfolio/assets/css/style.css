@@ -2281,6 +2281,7 @@ textarea.form-input::-webkit-resizer { display: none; }
   }
 
   .drift-wall__plane { transform: translate(-50%, -50%) scale(0.9) rotateX(10deg) rotateY(-8deg) translateZ(-70px); }
+
 }
 
 @media (prefers-reduced-motion: reduce) {
