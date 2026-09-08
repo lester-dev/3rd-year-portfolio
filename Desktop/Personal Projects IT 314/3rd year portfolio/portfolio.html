@@ -89,9 +89,9 @@
 
           <li class="contact-item">
 
-            <div class="icon-box">
+            <a href="mailto:itsmelesteradalia@gmail.com" class="icon-box" aria-label="Email Lester Adalia">
               <ion-icon name="mail-outline"></ion-icon>
-            </div>
+            </a>
 
             <div class="contact-info">
               <p class="contact-title">Email</p>
@@ -103,9 +103,9 @@
 
           <li class="contact-item">
 
-            <div class="icon-box">
+            <a href="https://www.linkedin.com/in/lester-adalia-648a9630b/" class="icon-box" target="_blank" rel="noopener noreferrer" aria-label="Lester Adalia on LinkedIn">
               <ion-icon name="logo-linkedin"></ion-icon>
-            </div>
+            </a>
 
             <div class="contact-info">
               <p class="contact-title">linkedin</p>
@@ -117,9 +117,9 @@
 
           <li class="contact-item">
 
-            <div class="icon-box">
+            <a href="https://github.com/lester-dev" class="icon-box" target="_blank" rel="noopener noreferrer" aria-label="Lester Adalia on GitHub">
               <ion-icon name="logo-github"></ion-icon>
-            </div>
+            </a>
 
             <div class="contact-info">
               <p class="contact-title">GitHub</p>
@@ -131,9 +131,9 @@
 
           <li class="contact-item">
 
-            <div class="icon-box">
+            <a href="./assets/images/resume.pdf" class="icon-box" target="_blank" rel="noopener noreferrer" aria-label="Open Lester Adalia's resume">
               <ion-icon name="document-outline"></ion-icon>
-            </div>
+            </a>
 
             <div class="contact-info">
               <p class="contact-title">Resume</p>
@@ -200,10 +200,6 @@
 
           <li class="navbar-item">
             <button class="navbar-link" data-nav-link>Portfolio</button>
-          </li>
-
-          <li class="navbar-item">
-            <button class="navbar-link" data-nav-link>Blog</button>
           </li>
 
           <li class="navbar-item">
@@ -697,7 +693,7 @@
 
           </div>
 
-          <div class="project-list drift-wall" data-drift-wall aria-label="Drifting portfolio projects">
+          <div class="project-list drift-wall photograph-gallery" data-drift-wall data-no-duplicate data-photograph-gallery aria-label="Photographs portfolio gallery">
 
             <li class="project-item  active" data-filter-item data-category="web development">
               <a href="#">
@@ -875,7 +871,7 @@
         - #BLOG
       -->
 
-      <article class="blog" data-page="blog">
+      <article class="blog" data-page="blog" hidden aria-hidden="true">
 
         <header>
           <h2 class="h2 article-title">Blog</h2>
@@ -1073,17 +1069,24 @@
           <h2 class="h2 article-title">Contact</h2>
         </header>
 
-        <section class="mapbox" data-mapbox>
-          <figure>
-            <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d199666.5651251294!2d-121.58334177520186!3d38.56165006739519!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x809ac672b28397f9%3A0x921f6aaa74197fdb!2sSacramento%2C%20CA%2C%20USA!5e0!3m2!1sen!2sbd!4v1647608789441!5m2!1sen!2sbd"
-              width="400" height="300" loading="lazy"></iframe>
+        <section class="contact-intro">
+          <figure class="contact-intro-image">
+            <img src="./assets/images/pic ko.jpg" alt="Lester Adalia ready to discuss your project">
           </figure>
+
+          <div class="contact-intro-copy">
+            <p class="contact-eyebrow">Let's create something meaningful</p>
+            <h3 class="h3">Have a project in mind?</h3>
+            <p>
+              Whether you need a photographer for a special event or a creative partner for your next visual project,
+              I would love to hear what you are planning.
+            </p>
+          </div>
         </section>
 
         <section class="contact-form">
 
-          <h3 class="h3 form-title">Contact Form</h3>
+          <h3 class="h3 form-title">Let's work together</h3>
 
           <form action="#" class="form" data-form>
 
@@ -1092,6 +1095,14 @@
 
               <input type="email" name="email" class="form-input" placeholder="Email address" required data-form-input>
             </div>
+
+            <select name="service" class="form-input" required data-form-input>
+              <option value="" selected disabled>What would you like to hire me for?</option>
+              <option value="photography">Hire me as a photographer</option>
+              <option value="graphic-design">Hire me as a graphic designer</option>
+              <option value="videography">Hire me as a videographer</option>
+              <option value="video-editing">Hire me as a video editor</option>
+            </select>
 
             <textarea name="message" class="form-input" placeholder="Your Message" required data-form-input></textarea>
 
