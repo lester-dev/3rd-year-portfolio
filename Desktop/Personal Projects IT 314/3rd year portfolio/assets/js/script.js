@@ -78,6 +78,11 @@ const filterFunc = function (selectedValue) {
       filterItems[i].classList.remove("active");
     }
   }
+
+  if (photographGallery) {
+    photographGallery.classList.toggle("videos-view", selectedValue === "videos");
+    photographGallery.classList.toggle("side-projects-view", selectedValue === "side projects");
+  }
 };
 
 if (filterBtn.length > 0) {
@@ -198,43 +203,211 @@ const photographImages = [
   "untitled-79.JPG",
   "untitled-77.JPG",
   "untitled-74.JPG",
-  "untitled-73.JPG"
+  "untitled-73.JPG",
+  "Sienna-7.jpg",
+  "Sienna-27.jpg",
+  "Sienna-28.jpg",
+  "Sienna-31.jpg",
+  "Sienna-123.jpg",
+  "Sienna-124.jpg"
+];
+
+const graphicDesignImages = [
+  "1.png",
+  "2.png",
+  "3.png",
+  "4.png",
+  "Astra Zenith.png",
+  "Astra.png",
+  "BB Sando.png",
+  "Brutalism.png",
+  "CL1.png",
+  "Civic.png",
+  "Coffee Poster.png",
+  "DP Blast.png",
+  "Final Sando.png",
+  "Final final.png",
+  "Football Jersey.png",
+  "Hev Abi.png",
+  "Pogacar.png",
+  "Polo Design 1.png",
+  "Polo Design 2.png",
+  "Polo Design 3.png",
+  "Polo Design 4.png",
+  "Polo Design 5.png",
+  "Polo Design 6.png",
+  "Polo Design 7.png",
+  "Polo Design 8.png",
+  "Polo Design 9.png",
+  "Polo Design 10.png",
+  "Polo Design 11.png",
+  "Polo Design 12.png",
+  "Polo Design 13.png",
+  "Polo Design 14.png",
+  "Polo Design 15.png",
+  "Poster.png",
+  "Sherwin and Me.png",
+  "TIP.png",
+  "Try 2.png",
+  "Try.png",
+  "Valentines.png",
+  "_.png",
+  "astra vneck.png",
+  "honda civic.png",
+  "myworks.jpg",
+  "myworks2.jpg",
+  "nike.png",
+  "pubmat.png",
+  "soon.png"
+];
+
+const sideProjectImages = [
+  "Data Visualization For Restaurant.png",
+  "Python Fare Calculation.png",
+  "Sales Report Dashboard.png",
+  "UIUX Pharmacy System.png",
+  "Wifi Signal Strength Simulator.png"
+];
+
+const sideProjectDetails = {
+  "Data Visualization For Restaurant.png": {
+    description: "Project link:",
+    descriptionUrl: "https://tinyurl.com/Data-Studio-Project"
+  },
+  "Python Fare Calculation.png": {
+    description: "A simple calculator fare for tourist and local in Mabini Batangas"
+  },
+  "Sales Report Dashboard.png": {
+    description: "A data visualization insights for the Sales of the Company"
+  },
+  "UIUX Pharmacy System.png": {
+    description: "Project link:",
+    descriptionUrl: "https://tinyurl.com/Pharmacy-Prototype"
+  },
+  "Wifi Signal Strength Simulator.png": {
+    description: "Project link:",
+    descriptionUrl: "https://wifi-simulator.vercel.app/"
+  }
+};
+
+const videoEntries = [
+  {
+    fileName: "Outing",
+    href: "./assets/images/Videos/Outing.mp4",
+    kind: "video",
+    src: "./assets/images/Videos/Outing.mp4"
+  },
+  {
+    fileName: "rotoms",
+    href: "./assets/images/Videos/rotoms.mp4",
+    kind: "video",
+    src: "./assets/images/Videos/rotoms.mp4"
+  },
+  {
+    fileName: "Dswak Year End",
+    kind: "image",
+    src: "./assets/images/Videos/Dswak Year End.jpg",
+    descriptionUrl: "https://www.facebook.com/share/v/1FZ8dWZd58/"
+  },
+  {
+    fileName: "Siklaban",
+    kind: "image",
+    src: "./assets/images/Videos/Siklaban.png",
+    descriptionUrl: "https://www.facebook.com/share/v/1Hszf3EJ3P/"
+  }
+];
+
+const portfolioEntries = [
+  ...photographImages.map((fileName) => ({
+    category: "photographs",
+    fileName,
+    kind: "image",
+    src: `./assets/images/Photographs/${fileName}`,
+    date: photographDates[fileName] || ""
+  })),
+  ...graphicDesignImages.map((fileName) => ({
+    category: "graphic design",
+    fileName,
+    kind: "image",
+    src: `./assets/images/Graphic Design/${fileName}`,
+    date: ""
+  })),
+  ...sideProjectImages.map((fileName, index) => ({
+    category: "side projects",
+    fileName,
+    kind: "image",
+    src: `./assets/images/Side Projects/${fileName}`,
+    date: "",
+    description: sideProjectDetails[fileName].description,
+    descriptionUrl: sideProjectDetails[fileName].descriptionUrl || "",
+    layoutPosition: index + 1
+  })),
+  ...videoEntries.map((entry) => ({
+    category: "videos",
+    fileName: entry.fileName,
+    kind: entry.kind,
+    src: entry.src,
+    href: entry.href || "",
+    descriptionUrl: entry.descriptionUrl || "",
+    date: ""
+  }))
 ];
 
 if (photographGallery) {
   photographGallery.replaceChildren();
 
-  photographImages.forEach((fileName, index) => {
+  portfolioEntries.forEach((entry, index) => {
     const item = document.createElement("li");
-    const link = document.createElement("a");
+    const card = document.createElement(entry.kind === "video" ? "div" : "a");
     const figure = document.createElement("figure");
     const icon = document.createElement("div");
     const iconElement = document.createElement("ion-icon");
-    const image = document.createElement("img");
+    const media = document.createElement(entry.kind === "video" ? "video" : "img");
     const title = document.createElement("h3");
     const category = document.createElement("p");
+    const displayName = entry.category === "side projects" ? entry.fileName.replace(/\.png$/i, "") : entry.fileName;
 
+    card.className = "project-card";
+    if (entry.kind !== "video") {
+      card.href = entry.src;
+    }
     item.className = "project-item active";
     item.dataset.filterItem = "";
-    item.dataset.category = "photographs";
-    item.dataset.fileName = fileName;
-    item.dataset.date = photographDates[fileName] || "";
-    link.href = `./assets/images/Photographs/${encodeURIComponent(fileName).replace(/%20/g, " ")}`;
+    item.dataset.category = entry.category;
+    item.dataset.fileName = displayName;
+    item.dataset.date = entry.date;
+    item.dataset.kind = entry.kind;
+    if (entry.description) {
+      item.dataset.description = entry.description;
+    }
+    if (entry.descriptionUrl) {
+      item.dataset.descriptionUrl = entry.descriptionUrl;
+    }
+    if (entry.layoutPosition) {
+      item.dataset.layoutPosition = entry.layoutPosition;
+    }
     figure.className = "project-img";
     icon.className = "project-item-icon-box";
     iconElement.setAttribute("name", "eye-outline");
-    image.src = link.href;
-    image.alt = `Photograph ${index + 1}`;
-    image.loading = "eager";
+    media.src = entry.src;
+    if (entry.kind === "video") {
+      media.controls = true;
+      media.preload = "metadata";
+      media.playsInline = true;
+      media.setAttribute("aria-label", entry.fileName);
+    } else {
+      media.alt = entry.fileName;
+      media.loading = "eager";
+    }
     title.className = "project-title";
-    title.textContent = fileName;
+    title.textContent = displayName;
     category.className = "project-category";
-    category.textContent = "Photographs";
+    category.textContent = entry.category === "photographs" ? "Photographs" : entry.category === "graphic design" ? "Graphic Design" : entry.category === "side projects" ? "Side Projects" : "Videos";
 
     icon.appendChild(iconElement);
-    figure.append(icon, image);
-    link.append(figure, title, category);
-    item.appendChild(link);
+    figure.append(icon, media);
+    card.append(figure, title, category);
+    item.appendChild(card);
     photographGallery.appendChild(item);
   });
 }
@@ -342,7 +515,10 @@ const projectModalCloseButtons = document.querySelectorAll("[data-project-close]
 const projectModalDescriptions = {
   "Web development": "A web development concept focused on clear structure, responsive layouts, and an engaging visual experience.",
   "Web design": "A visual design study exploring composition, typography, color, and the relationship between interface and content.",
-  Applications: "An application concept designed around focused interactions, useful information, and a polished user experience."
+  Applications: "An application concept designed around focused interactions, useful information, and a polished user experience.",
+  "Graphic Design": "A visual design study exploring composition, typography, color, and creative storytelling.",
+  "Side Projects": "A personal project exploring ideas, experimentation, and practical creative problem-solving.",
+  Videos: "A motion and storytelling piece created to capture moments, energy, and creative direction."
 };
 
 const closeProjectModal = function () {
@@ -365,7 +541,15 @@ const openProjectModal = function (item) {
   projectModalImage.alt = image.alt;
   projectModalTitle.textContent = item.dataset.fileName || title.textContent.trim();
   projectModalCategory.textContent = category.textContent.trim();
-  projectModalDescription.textContent = item.dataset.date || projectModalDescriptions[category.textContent.trim()] || "A portfolio project exploring thoughtful visual communication and digital craft.";
+  projectModalDescription.textContent = item.dataset.description || item.dataset.date || projectModalDescriptions[category.textContent.trim()] || "A portfolio project exploring thoughtful visual communication and digital craft.";
+  if (item.dataset.descriptionUrl) {
+    const link = document.createElement("a");
+    link.href = item.dataset.descriptionUrl;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    link.textContent = item.dataset.category === "videos" ? "Watch on Facebook" : "Open project";
+    projectModalDescription.append(" ", link);
+  }
   projectModal.classList.toggle("photograph-preview", item.dataset.category === "photographs");
   projectModal.classList.add("active");
   projectModal.setAttribute("aria-hidden", "false");
@@ -379,8 +563,22 @@ driftWalls.forEach((wall) => {
     const link = event.target.closest(".project-item:not([data-drift-clone]) > a");
     if (!link) return;
 
+    const item = link.closest(".project-item");
+    if (!item) return;
+
     event.preventDefault();
-    openProjectModal(link.closest(".project-item"));
+
+    if (item.dataset.kind === "video") {
+      const videoSource = item.dataset.videoSrc || link.href;
+      if (videoModalVideo) {
+        videoModalVideo.src = videoSource;
+        videoModalVideo.setAttribute("poster", item.querySelector("img")?.src || "");
+      }
+      openVideoModal();
+      return;
+    }
+
+    openProjectModal(item);
   });
 });
 
