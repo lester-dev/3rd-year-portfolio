@@ -14,8 +14,9 @@
       --ink: #101215;
       --paper: #e8e5df;
       --muted: #686862;
-      --accent: #b63b2d;
-      --line: rgba(16, 18, 21, 0.16);
+      --accent: #101215;
+      --accent-warm: #71717a;
+      --line: rgba(16, 18, 21, 0.14);
     }
 
     *,
@@ -37,10 +38,12 @@
       height: 100vh;
       color: var(--ink);
       background:
-        radial-gradient(circle at 18% 18%, rgba(255, 255, 255, 0.88), transparent 30%),
-        radial-gradient(circle at 84% 78%, rgba(182, 59, 45, 0.12), transparent 28%),
+        radial-gradient(circle at 18% 18%, rgba(255, 255, 255, 0.95), transparent 32%),
+        radial-gradient(circle at 84% 78%, rgba(0, 0, 0, 0.08), transparent 28%),
+        radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.6), transparent 50%),
         var(--paper);
       font-family: "DM Sans", sans-serif;
+      perspective: 1400px;
     }
 
     .home {
@@ -50,7 +53,7 @@
       height: 100vh;
       overflow: hidden;
       margin: auto;
-      padding: clamp(24px, 4vw, 58px) clamp(20px, 5vw, 76px) clamp(20px, 3vw, 42px);
+      padding: clamp(24px, 4vw, 52px) clamp(20px, 5vw, 76px) clamp(20px, 3vw, 38px);
     }
 
     .intro {
@@ -59,7 +62,7 @@
       justify-content: space-between;
       gap: 24px;
       border-bottom: 1px solid var(--line);
-      padding-bottom: 20px;
+      padding-bottom: 18px;
     }
 
     .eyebrow,
@@ -77,15 +80,42 @@
       font-family: "Playfair Display", serif;
       font-size: clamp(1.65rem, 3vw, 2.6rem);
       font-weight: 500;
-      letter-spacing: 0;
+      letter-spacing: -0.02em;
       line-height: 1;
     }
 
+    .intro-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 6px;
+    }
+
     .instruction {
-      align-self: center;
-      max-width: 220px;
+      max-width: 260px;
       line-height: 1.6;
       text-align: right;
+    }
+
+    .skip-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      color: #101215;
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 600;
+      text-decoration: none;
+      transition: transform 0.2s ease, opacity 0.2s ease, color 0.2s ease;
+      padding: 3px 0;
+      border-bottom: 1px solid transparent;
+    }
+
+    .skip-link:hover {
+      transform: translateX(3px);
+      color: #000000;
+      border-bottom-color: #000000;
     }
 
     .camera-stage {
@@ -97,17 +127,20 @@
       gap: clamp(8px, 1.5vh, 18px);
       min-height: 0;
       overflow: hidden;
-      padding: clamp(24px, 4vh, 56px) 0;
+      padding: clamp(20px, 3.5vh, 48px) 0;
     }
 
     .camera-wrap {
       position: relative;
       justify-self: center;
-      width: min(100vw, 78vh, 1100px);
+      width: min(100vw, 78vh, 1080px);
       margin-inline: auto;
       line-height: 0;
-      filter: drop-shadow(0 28px 24px rgba(16, 18, 21, 0.18));
+      filter: drop-shadow(0 32px 30px rgba(16, 18, 21, 0.22));
       animation: camera-arrive 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+      transform-style: preserve-3d;
+      transition: transform 0.15s ease-out;
+      cursor: crosshair;
     }
 
     .camera-screen {
@@ -120,6 +153,7 @@
       border-radius: 2%;
       background: #050505;
       z-index: 1;
+      box-shadow: inset 0 0 14px rgba(0, 0, 0, 0.85);
     }
 
     .camera-screen img {
@@ -128,12 +162,118 @@
       height: 100%;
       object-fit: cover;
       object-position: center;
+      transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.5s ease;
+    }
+
+    .camera-wrap:hover .camera-screen img {
+      transform: scale(1.04);
+      filter: contrast(1.08);
+    }
+
+    /* Camera Viewfinder OSD / HUD */
+    .camera-hud {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 7% 8%;
+      color: #ffffff;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: clamp(0.55rem, 0.85vw, 0.85rem);
+      font-weight: 600;
+      pointer-events: none;
+      z-index: 2;
+      text-shadow: 0 0 4px rgba(0, 0, 0, 0.95), 0 0 8px rgba(255, 255, 255, 0.5);
+      letter-spacing: 0.04em;
+    }
+
+    .hud-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    .hud-rec {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      color: #ffffff;
+      text-shadow: 0 0 6px rgba(255, 255, 255, 0.8);
+    }
+
+    .rec-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #ffffff;
+      box-shadow: 0 0 6px rgba(255, 255, 255, 0.9);
+      animation: rec-blink 1.2s ease-in-out infinite;
+    }
+
+    .hud-center {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 32%;
+      aspect-ratio: 1;
+      border: 1px dashed rgba(255, 255, 255, 0.45);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .hud-reticle {
+      position: relative;
+      width: 14px;
+      height: 14px;
+    }
+
+    .hud-reticle::before,
+    .hud-reticle::after {
+      content: "";
+      position: absolute;
+      background: #ffffff;
+    }
+
+    .hud-reticle::before {
+      top: 6px;
+      left: 0;
+      right: 0;
+      height: 2px;
+    }
+
+    .hud-reticle::after {
+      left: 6px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+    }
+
+    .camera-wrap:hover .hud-center {
+      border-color: #ffffff;
+      transform: translate(-50%, -50%) scale(0.92);
+      box-shadow: 0 0 12px rgba(255, 255, 255, 0.6);
+    }
+
+    .hud-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      color: #ffffff;
+      text-shadow: 0 0 4px rgba(0, 0, 0, 0.95);
     }
 
     .camera {
       display: block;
       width: 100%;
       height: auto;
+      pointer-events: none;
     }
 
     .ok-hotspot {
@@ -148,30 +288,50 @@
       background: transparent;
       cursor: pointer;
       transform: translate(-50%, -50%);
-      z-index: 2;
-      transition: border-color 180ms ease, box-shadow 180ms ease, background 180ms ease;
+      z-index: 3;
+      transition: border-color 180ms ease, box-shadow 180ms ease, background 180ms ease, transform 120ms ease;
     }
 
     .ok-hotspot::after {
       content: "";
       position: absolute;
       inset: -35%;
-      border: 1px solid rgba(182, 59, 45, 0.6);
+      border: 2px solid rgba(255, 255, 255, 0.85);
       border-radius: inherit;
       animation: ok-pulse 2.2s ease-out infinite;
     }
 
     .ok-hotspot:hover,
     .ok-hotspot:focus-visible {
-      border-color: rgba(255, 255, 255, 0.85);
-      background: rgba(182, 59, 45, 0.2);
-      box-shadow: 0 0 0 5px rgba(182, 59, 45, 0.2), 0 0 22px rgba(182, 59, 45, 0.55);
+      border-color: #ffffff;
+      background: rgba(255, 255, 255, 0.35);
+      box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.3), 0 0 28px rgba(255, 255, 255, 0.9);
       outline: none;
+      transform: translate(-50%, -50%) scale(1.08);
+    }
+
+    .ok-hotspot:active {
+      transform: translate(-50%, -50%) scale(0.94);
     }
 
     .ok-hotspot:focus-visible::after,
     .ok-hotspot:hover::after {
       animation-play-state: paused;
+    }
+
+    /* Camera Flash FX */
+    .camera-flash {
+      position: fixed;
+      inset: 0;
+      background: #ffffff;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 100;
+      transition: opacity 0.08s ease-out;
+    }
+
+    .camera-flash.flash-active {
+      opacity: 0.96;
     }
 
     .footer {
@@ -180,13 +340,14 @@
       justify-content: space-between;
       gap: 20px;
       border-top: 1px solid var(--line);
-      padding-top: 16px;
+      padding-top: 14px;
     }
 
     .footer-mark {
-      color: var(--accent);
-      font-size: 1.2rem;
-      letter-spacing: 0;
+      color: #101215;
+      font-size: 1.15rem;
+      letter-spacing: 0.04em;
+      font-weight: 600;
     }
 
     .video-modal {
@@ -197,8 +358,8 @@
       visibility: hidden;
       opacity: 0;
       pointer-events: none;
-      background: rgba(0, 0, 0, 0.88);
-      z-index: 10;
+      background: rgba(0, 0, 0, 0.94);
+      z-index: 50;
       transition: opacity 180ms ease, visibility 180ms ease;
     }
 
@@ -215,10 +376,15 @@
       background: #000;
     }
 
+    @keyframes rec-blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.2; }
+    }
+
     @keyframes camera-arrive {
       from {
         opacity: 0;
-        transform: translateY(24px) scale(0.97);
+        transform: translateY(28px) scale(0.96);
       }
       to {
         opacity: 1;
@@ -228,13 +394,13 @@
 
     @keyframes ok-pulse {
       0% {
-        opacity: 0.8;
+        opacity: 0.85;
         transform: scale(0.7);
       }
       75%,
       100% {
         opacity: 0;
-        transform: scale(1.25);
+        transform: scale(1.3);
       }
     }
 
@@ -251,25 +417,29 @@
         min-height: 100svh;
         height: auto;
         overflow: visible;
-        padding: 24px 20px 20px;
+        padding: 20px 16px 16px;
       }
 
       .intro {
         display: block;
       }
 
+      .intro-right {
+        align-items: flex-start;
+        margin-top: 14px;
+      }
+
       .instruction {
-        margin-top: 16px;
         text-align: left;
       }
 
       .camera-stage {
         min-height: 0;
-        padding: clamp(20px, 6vh, 40px) 0;
+        padding: clamp(16px, 4vh, 32px) 0;
       }
 
       .camera-wrap {
-        width: min(100%, 70vh);
+        width: min(100%, 65vh);
         max-width: 100%;
       }
 
@@ -281,40 +451,63 @@
       .footer {
         align-items: flex-start;
         flex-direction: column;
-        gap: 8px;
+        gap: 6px;
       }
     }
 
     @media (prefers-reduced-motion: reduce) {
       .camera-wrap,
-      .ok-hotspot::after {
+      .ok-hotspot::after,
+      .rec-dot {
         animation: none;
       }
     }
   </style>
 </head>
 <body>
+  <div class="camera-flash" id="cameraFlash" aria-hidden="true"></div>
+
   <main class="home">
     <header class="intro">
       <div>
-        <p class="eyebrow">Personal portfolio</p>
+        <p class="eyebrow">Personal portfolio · 3rd Year IT</p>
         <h1 class="name">Lester Adalia</h1>
       </div>
-      <p class="instruction">Press the camera's OK button to enter</p>
+      <div class="intro-right">
+        <p class="instruction">Press the camera's <strong>OK</strong> button or [SPACE] to enter</p>
+        <a href="./portfolio.html" class="skip-link">Skip intro & enter portfolio →</a>
+      </div>
     </header>
 
     <section class="camera-stage" aria-label="Enter portfolio">
-      <div class="camera-wrap">
+      <div class="camera-wrap" id="cameraWrap">
         <div class="camera-screen">
           <img src="./assets/images/dp.jpeg" alt="Lester creating a photograph">
+          <div class="camera-hud" aria-hidden="true">
+            <div class="hud-top">
+              <span class="hud-rec"><span class="rec-dot"></span> REC</span>
+              <span>RAW+L</span>
+              <span>4K 60P</span>
+              <span>BAT 94%</span>
+            </div>
+            <div class="hud-center">
+              <div class="hud-reticle"></div>
+            </div>
+            <div class="hud-bottom">
+              <span>1/250s</span>
+              <span>F2.8</span>
+              <span>ISO 200</span>
+              <span>AF-C [●]</span>
+            </div>
+          </div>
         </div>
         <img class="camera" src="./assets/images/canon.png" alt="Canon camera with an OK button on its control dial">
-        <button class="ok-hotspot" type="button" aria-label="Play introduction and enter Lester Adalia's portfolio"></button>
+        <button class="ok-hotspot" type="button" aria-label="Play introduction and enter Lester Adalia's portfolio" title="Click OK to snap photo and enter"></button>
       </div>
     </section>
 
     <footer class="footer">
-      <span>Photography / Videography / Graphic Design</span>
+      <span>Photography · Videography · Graphic Design · Web Tech</span>
       <span class="footer-mark">Unfiltered Shots</span>
     </footer>
   </main>
@@ -327,20 +520,101 @@
     const videoModal = document.querySelector(".video-modal");
     const video = document.querySelector(".video-modal__video");
     const okButton = document.querySelector(".ok-hotspot");
+    const cameraWrap = document.getElementById("cameraWrap");
+    const cameraFlash = document.getElementById("cameraFlash");
+
+    // Synthesized Camera Shutter Audio via Web Audio API (100% reliable, zero asset dependencies)
+    const playShutterSound = () => {
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        const ctx = new AudioCtx();
+        if (ctx.state === "suspended") ctx.resume();
+
+        const now = ctx.currentTime;
+
+        // Curtain 1 snap
+        const noise1 = ctx.createBufferSource();
+        const buffer1 = ctx.createBuffer(1, ctx.sampleRate * 0.04, ctx.sampleRate);
+        const data1 = buffer1.getChannelData(0);
+        for (let i = 0; i < buffer1.length; i++) data1[i] = (Math.random() * 2 - 1) * Math.exp(-i / (ctx.sampleRate * 0.007));
+        noise1.buffer = buffer1;
+
+        const filter1 = ctx.createBiquadFilter();
+        filter1.type = "bandpass";
+        filter1.frequency.setValueAtTime(1200, now);
+        filter1.Q.setValueAtTime(3, now);
+
+        const gain1 = ctx.createGain();
+        gain1.gain.setValueAtTime(0.4, now);
+        gain1.gain.exponentialRampToValueAtTime(0.01, now + 0.035);
+
+        noise1.connect(filter1);
+        filter1.connect(gain1);
+        gain1.connect(ctx.destination);
+        noise1.start(now);
+
+        // Curtain 2 snap (45ms later)
+        const noise2 = ctx.createBufferSource();
+        const buffer2 = ctx.createBuffer(1, ctx.sampleRate * 0.05, ctx.sampleRate);
+        const data2 = buffer2.getChannelData(0);
+        for (let i = 0; i < buffer2.length; i++) data2[i] = (Math.random() * 2 - 1) * Math.exp(-i / (ctx.sampleRate * 0.009));
+        noise2.buffer = buffer2;
+
+        const filter2 = ctx.createBiquadFilter();
+        filter2.type = "bandpass";
+        filter2.frequency.setValueAtTime(800, now + 0.045);
+        filter2.Q.setValueAtTime(2.5, now + 0.045);
+
+        const gain2 = ctx.createGain();
+        gain2.gain.setValueAtTime(0.5, now + 0.045);
+        gain2.gain.exponentialRampToValueAtTime(0.01, now + 0.09);
+
+        noise2.connect(filter2);
+        filter2.connect(gain2);
+        gain2.connect(ctx.destination);
+        noise2.start(now + 0.045);
+      } catch (e) {
+        // Audio playback error fallback
+      }
+    };
+
+    // Interactive 3D Parallax Tilt
+    if (cameraWrap && window.matchMedia("(hover: hover)").matches) {
+      document.addEventListener("pointermove", (event) => {
+        const x = (event.clientX / window.innerWidth - 0.5) * 16;
+        const y = (event.clientY / window.innerHeight - 0.5) * -14;
+        cameraWrap.style.transform = `perspective(1200px) rotateX(${y}deg) rotateY(${x}deg) scale(1.02)`;
+      });
+
+      document.addEventListener("pointerleave", () => {
+        cameraWrap.style.transform = "perspective(1200px) rotateX(0deg) rotateY(0deg) scale(1)";
+      });
+    }
 
     const enterPortfolio = () => {
       window.location.href = "./portfolio.html";
     };
 
-    okButton.addEventListener("click", () => {
-      videoModal.classList.add("active");
-      videoModal.setAttribute("aria-hidden", "false");
-      video.currentTime = 0;
-      video.play().catch(() => {
-        video.controls = true;
-      });
-    });
+    const triggerShutterAndEnter = () => {
+      playShutterSound();
+      if (cameraFlash) {
+        cameraFlash.classList.add("flash-active");
+        setTimeout(() => cameraFlash.classList.remove("flash-active"), 120);
+      }
 
+      setTimeout(() => {
+        videoModal.classList.add("active");
+        videoModal.setAttribute("aria-hidden", "false");
+        video.currentTime = 0;
+        const playPromise = video.play();
+        if (playPromise) {
+          playPromise.catch(() => enterPortfolio());
+        }
+      }, 100);
+    };
+
+    okButton.addEventListener("click", triggerShutterAndEnter);
     video.addEventListener("ended", enterPortfolio);
 
     videoModal.addEventListener("click", (event) => {
@@ -350,6 +624,9 @@
     document.addEventListener("keydown", (event) => {
       if (event.key === "Escape" && videoModal.classList.contains("active")) {
         enterPortfolio();
+      } else if ((event.key === " " || event.key === "Enter") && !videoModal.classList.contains("active") && event.target.tagName !== "A") {
+        event.preventDefault();
+        triggerShutterAndEnter();
       }
     });
   </script>

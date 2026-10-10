@@ -568,7 +568,11 @@ const projectModalImage = document.querySelector("[data-project-image]");
 const projectModalCategory = document.querySelector("[data-project-category]");
 const projectModalTitle = document.querySelector("[data-project-title]");
 const projectModalDescription = document.querySelector("[data-project-description]");
+const projectModalMeta = document.querySelector("[data-project-meta]");
+const projectModalPrevBtn = document.querySelector("[data-modal-prev]");
+const projectModalNextBtn = document.querySelector("[data-modal-next]");
 const projectModalCloseButtons = document.querySelectorAll("[data-project-close]");
+
 const projectModalDescriptions = {
   "Web development": "A web development concept focused on clear structure, responsive layouts, and an engaging visual experience.",
   "Web design": "A visual design study exploring composition, typography, color, and the relationship between interface and content.",
@@ -578,14 +582,18 @@ const projectModalDescriptions = {
   Videos: "A motion and storytelling piece created to capture moments, energy, and creative direction."
 };
 
+let currentModalIndex = -1;
+let currentActiveItems = [];
+
 const closeProjectModal = function () {
   if (!projectModal) return;
 
   projectModal.classList.remove("active");
   projectModal.setAttribute("aria-hidden", "true");
+  currentModalIndex = -1;
 };
 
-const openProjectModal = function (item) {
+const renderModalItem = function (item) {
   if (!projectModal || !projectModalImage || !projectModalTitle || !projectModalCategory || !projectModalDescription) return;
 
   const image = item.querySelector(".project-img img");
@@ -600,6 +608,54 @@ const openProjectModal = function (item) {
   projectModalTitle.textContent = item.dataset.fileName || title.textContent.trim();
   projectModalCategory.textContent = category.textContent.trim();
   projectModalDescription.textContent = item.dataset.description || item.dataset.date || projectModalDescriptions[category.textContent.trim()] || "A portfolio project exploring thoughtful visual communication and digital craft.";
+
+  if (projectModalMeta) {
+    projectModalMeta.replaceChildren();
+    const cat = item.dataset.category;
+    if (cat === "photographs") {
+      const cameraPill = document.createElement("span");
+      cameraPill.className = "meta-pill";
+      cameraPill.innerHTML = '<ion-icon name="camera-outline"></ion-icon> Canon EOS';
+
+      const aperturePill = document.createElement("span");
+      aperturePill.className = "meta-pill";
+      aperturePill.textContent = "ƒ/1.8";
+
+      const shutterPill = document.createElement("span");
+      shutterPill.className = "meta-pill";
+      shutterPill.textContent = "1/500s";
+
+      const isoPill = document.createElement("span");
+      isoPill.className = "meta-pill";
+      isoPill.textContent = "ISO 100";
+
+      projectModalMeta.append(cameraPill, aperturePill, shutterPill, isoPill);
+
+      if (item.dataset.date) {
+        const datePill = document.createElement("span");
+        datePill.className = "meta-pill";
+        datePill.textContent = item.dataset.date;
+        projectModalMeta.appendChild(datePill);
+      }
+    } else if (cat === "graphic design") {
+      const toolPill = document.createElement("span");
+      toolPill.className = "meta-pill";
+      toolPill.innerHTML = '<ion-icon name="color-palette-outline"></ion-icon> Adobe CC / Design';
+
+      const resPill = document.createElement("span");
+      resPill.className = "meta-pill";
+      resPill.textContent = "300 DPI Vector/Raster";
+
+      projectModalMeta.append(toolPill, resPill);
+    } else if (cat === "side projects") {
+      const techPill = document.createElement("span");
+      techPill.className = "meta-pill";
+      techPill.innerHTML = '<ion-icon name="code-slash-outline"></ion-icon> IT Project';
+
+      projectModalMeta.appendChild(techPill);
+    }
+  }
+
   if (item.dataset.descriptionUrl) {
     const link = document.createElement("a");
     link.href = item.dataset.descriptionUrl;
@@ -608,7 +664,19 @@ const openProjectModal = function (item) {
     link.textContent = item.dataset.category === "videos" ? "Watch on Facebook" : "Open project";
     projectModalDescription.append(" ", link);
   }
+
   projectModal.classList.toggle("photograph-preview", item.dataset.category === "photographs");
+};
+
+const openProjectModal = function (item) {
+  if (!projectModal) return;
+
+  currentActiveItems = Array.from(document.querySelectorAll(".drift-wall .project-item.active:not([data-drift-clone])"));
+  currentModalIndex = currentActiveItems.indexOf(item);
+
+  renderModalItem(item);
+  if (typeof playShutterSound === "function") playShutterSound();
+
   projectModal.classList.add("active");
   projectModal.setAttribute("aria-hidden", "false");
 
@@ -616,9 +684,25 @@ const openProjectModal = function (item) {
   if (closeButton) closeButton.focus();
 };
 
+const navigateModal = function (direction) {
+  if (currentActiveItems.length === 0 || currentModalIndex < 0) return;
+
+  currentModalIndex = (currentModalIndex + direction + currentActiveItems.length) % currentActiveItems.length;
+  renderModalItem(currentActiveItems[currentModalIndex]);
+  if (typeof playShutterSound === "function") playShutterSound();
+};
+
+if (projectModalPrevBtn) {
+  projectModalPrevBtn.addEventListener("click", () => navigateModal(-1));
+}
+
+if (projectModalNextBtn) {
+  projectModalNextBtn.addEventListener("click", () => navigateModal(1));
+}
+
 driftWalls.forEach((wall) => {
   wall.addEventListener("click", (event) => {
-    const link = event.target.closest(".project-item:not([data-drift-clone]) > a");
+    const link = event.target.closest(".project-item:not([data-drift-clone]) > a, .project-item:not([data-drift-clone]) > .project-card");
     if (!link) return;
 
     const item = link.closest(".project-item");
@@ -645,8 +729,14 @@ projectModalCloseButtons.forEach((button) => {
 });
 
 document.addEventListener("keydown", function (event) {
-  if (event.key === "Escape" && projectModal && projectModal.classList.contains("active")) {
-    closeProjectModal();
+  if (projectModal && projectModal.classList.contains("active")) {
+    if (event.key === "Escape") {
+      closeProjectModal();
+    } else if (event.key === "ArrowLeft") {
+      navigateModal(-1);
+    } else if (event.key === "ArrowRight") {
+      navigateModal(1);
+    }
   }
 });
 
@@ -813,5 +903,200 @@ for (let i = 0; i < navigationLinks.length; i++) {
     });
 
     window.scrollTo(0, 0);
+  });
+}
+
+// ==========================================
+// DYNAMIC PORTFOLIO 2.0 ENHANCEMENTS
+// ==========================================
+
+// 1. Synthesized Camera Shutter Audio (Web Audio API)
+let sfxEnabled = localStorage.getItem("portfolio_sfx") !== "false";
+const sfxToggleBtn = document.querySelector("[data-sfx-toggle]");
+const sfxText = document.querySelector("[data-sfx-text]");
+
+const updateSfxButton = () => {
+  if (!sfxToggleBtn) return;
+  const icon = sfxToggleBtn.querySelector("ion-icon");
+  if (icon) icon.setAttribute("name", sfxEnabled ? "volume-high-outline" : "volume-mute-outline");
+  if (sfxText) sfxText.textContent = sfxEnabled ? "SFX: ON" : "SFX: OFF";
+};
+
+updateSfxButton();
+
+const playShutterSound = () => {
+  if (!sfxEnabled) return;
+  try {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if (!AudioCtx) return;
+    const ctx = new AudioCtx();
+    if (ctx.state === "suspended") ctx.resume();
+
+    const now = ctx.currentTime;
+
+    // Curtain 1
+    const noise1 = ctx.createBufferSource();
+    const buf1 = ctx.createBuffer(1, ctx.sampleRate * 0.035, ctx.sampleRate);
+    const d1 = buf1.getChannelData(0);
+    for (let i = 0; i < buf1.length; i++) d1[i] = (Math.random() * 2 - 1) * Math.exp(-i / (ctx.sampleRate * 0.007));
+    noise1.buffer = buf1;
+
+    const filter1 = ctx.createBiquadFilter();
+    filter1.type = "bandpass";
+    filter1.frequency.setValueAtTime(1100, now);
+    filter1.Q.setValueAtTime(3, now);
+
+    const gain1 = ctx.createGain();
+    gain1.gain.setValueAtTime(0.35, now);
+    gain1.gain.exponentialRampToValueAtTime(0.01, now + 0.03);
+
+    noise1.connect(filter1);
+    filter1.connect(gain1);
+    gain1.connect(ctx.destination);
+    noise1.start(now);
+
+    // Curtain 2 (40ms later)
+    const noise2 = ctx.createBufferSource();
+    const buf2 = ctx.createBuffer(1, ctx.sampleRate * 0.045, ctx.sampleRate);
+    const d2 = buf2.getChannelData(0);
+    for (let i = 0; i < buf2.length; i++) d2[i] = (Math.random() * 2 - 1) * Math.exp(-i / (ctx.sampleRate * 0.008));
+    noise2.buffer = buf2;
+
+    const filter2 = ctx.createBiquadFilter();
+    filter2.type = "bandpass";
+    filter2.frequency.setValueAtTime(750, now + 0.04);
+    filter2.Q.setValueAtTime(2.5, now + 0.04);
+
+    const gain2 = ctx.createGain();
+    gain2.gain.setValueAtTime(0.4, now + 0.04);
+    gain2.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
+
+    noise2.connect(filter2);
+    filter2.connect(gain2);
+    gain2.connect(ctx.destination);
+    noise2.start(now + 0.04);
+  } catch (e) {
+    // Audio fallback
+  }
+};
+
+if (sfxToggleBtn) {
+  sfxToggleBtn.addEventListener("click", () => {
+    sfxEnabled = !sfxEnabled;
+    localStorage.setItem("portfolio_sfx", String(sfxEnabled));
+    updateSfxButton();
+    if (sfxEnabled) {
+      playShutterSound();
+      showToast("Camera sound effects enabled");
+    } else {
+      showToast("Sound effects muted");
+    }
+  });
+}
+
+// 2. Floating Toast Notification
+const toastEl = document.querySelector("[data-toast]");
+let toastTimer = null;
+const showToast = (message) => {
+  if (!toastEl) return;
+  toastEl.textContent = message;
+  toastEl.classList.add("active");
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => {
+    toastEl.classList.remove("active");
+  }, 2600);
+};
+
+// 3. Quick Email Copy to Clipboard
+const copyEmailBtns = document.querySelectorAll("[data-copy-email]");
+copyEmailBtns.forEach(btn => {
+  btn.addEventListener("click", (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    const email = btn.dataset.copyEmail || "itsmelesteradalia@gmail.com";
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(email).then(() => {
+        showToast("Email address copied to clipboard!");
+      }).catch(() => {
+        showToast("Copied: " + email);
+      });
+    } else {
+      showToast("Copied: " + email);
+    }
+    playShutterSound();
+  });
+});
+
+// 4. View Mode Switcher (Responsive Grid vs 3D Drifting Wall)
+const viewModeBtns = document.querySelectorAll("[data-view-mode]");
+viewModeBtns.forEach(btn => {
+  btn.addEventListener("click", () => {
+    const mode = btn.dataset.viewMode;
+    viewModeBtns.forEach(b => {
+      const isActive = b === btn;
+      b.classList.toggle("active", isActive);
+      b.setAttribute("aria-pressed", String(isActive));
+    });
+
+    if (photographGallery) {
+      photographGallery.classList.toggle("grid-view", mode === "grid");
+    }
+
+    if (mode === "grid") {
+      showToast("Switched to Responsive Grid View");
+    } else {
+      showToast("Switched to 3D Drifting Wall View");
+    }
+    playShutterSound();
+  });
+});
+
+// 5. Interactive Before / After Color Grading Slider
+const baBox = document.querySelector("[data-before-after]");
+const baSlider = document.querySelector("[data-ba-slider]");
+if (baBox && baSlider) {
+  const updateBaSlider = (val) => {
+    baBox.style.setProperty("--slider-pos", val + "%");
+  };
+  baSlider.addEventListener("input", (e) => updateBaSlider(e.target.value));
+  updateBaSlider(baSlider.value);
+}
+
+// 6. Animated Metrics Numbers on Scroll
+const metricNumbers = document.querySelectorAll(".metric-number[data-count]");
+if (metricNumbers.length > 0) {
+  const counterObserver = new IntersectionObserver((entries, obs) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      obs.unobserve(entry.target);
+      const target = parseInt(entry.target.dataset.count, 10);
+      if (!target) return;
+      const duration = 1600;
+      const start = performance.now();
+      const update = (now) => {
+        const progress = Math.min((now - start) / duration, 1);
+        const ease = 1 - Math.pow(1 - progress, 3);
+        const current = Math.floor(ease * target);
+        entry.target.textContent = current >= 10000 ? "10K+" : current + "+";
+        if (progress < 1) requestAnimationFrame(update);
+      };
+      requestAnimationFrame(update);
+    });
+  }, { threshold: 0.3 });
+
+  metricNumbers.forEach(num => counterObserver.observe(num));
+}
+
+// 7. Mouse Spotlight Illumination across Cards
+if (window.matchMedia("(hover: hover)").matches) {
+  document.addEventListener("pointermove", (e) => {
+    const cards = document.querySelectorAll(".content-card, .metric-card, .gear-card, .service-item, .competency-card");
+    cards.forEach(card => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      card.style.setProperty("--mouse-x", `${x}px`);
+      card.style.setProperty("--mouse-y", `${y}px`);
+    });
   });
 }

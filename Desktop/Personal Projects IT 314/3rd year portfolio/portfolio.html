@@ -36,15 +36,37 @@
     </div>
   </div>
 
+  <!-- Toast notification -->
+  <div class="toast-notification" data-toast role="status" aria-live="polite"></div>
+
   <div class="project-modal" data-project-modal aria-hidden="true">
     <div class="project-modal__backdrop" data-project-close></div>
     <div class="project-modal__content" role="dialog" aria-modal="true" aria-labelledby="project-modal-title">
       <button class="project-modal__close" type="button" data-project-close aria-label="Close project preview">
         <ion-icon name="close-outline"></ion-icon>
       </button>
-      <img class="project-modal__image" data-project-image alt="">
+      
+      <button class="project-modal__nav project-modal__prev" type="button" data-modal-prev aria-label="Previous project">
+        <ion-icon name="chevron-back-outline"></ion-icon>
+      </button>
+      <button class="project-modal__nav project-modal__next" type="button" data-modal-next aria-label="Next project">
+        <ion-icon name="chevron-forward-outline"></ion-icon>
+      </button>
+
+      <div class="project-modal__image-wrapper">
+        <img class="project-modal__image" data-project-image alt="">
+      </div>
+
       <div class="project-modal__copy">
-        <p class="project-modal__category" data-project-category></p>
+        <div class="project-modal__header-bar">
+          <p class="project-modal__category" data-project-category></p>
+          <div class="project-modal__meta" data-project-meta>
+            <span class="meta-pill"><ion-icon name="camera-outline"></ion-icon> Canon EOS</span>
+            <span class="meta-pill">ƒ/1.8</span>
+            <span class="meta-pill">1/500s</span>
+            <span class="meta-pill">ISO 100</span>
+          </div>
+        </div>
         <h2 class="h2" id="project-modal-title" data-project-title></h2>
         <p class="project-modal__description" data-project-description></p>
       </div>
@@ -67,12 +89,18 @@
 
         <figure class="avatar-box">
           <img src="./assets/images/pic ko.jpg" alt="Lester Adalia" width="80">
+          <span class="status-indicator-dot" title="Available for bookings & freelance"></span>
         </figure>
 
         <div class="info-content">
           <h1 class="name" title="Lester Adalia">Lester Adalia</h1>
 
-          <p class="title">Photographer</p>
+          <p class="title">Photographer &amp; IT Student</p>
+
+          <div class="status-badge" title="Open for event documentation and creative commissions">
+            <span class="status-dot"></span>
+            <span>Available for bookings</span>
+          </div>
         </div>
 
         <button class="info_more-btn" data-sidebar-btn aria-label="Show contacts" aria-expanded="false" aria-controls="sidebar-contact-details">
@@ -98,7 +126,12 @@
             <div class="contact-info">
               <p class="contact-title">Email</p>
 
-              <a href="mailto:itsmelesteradalia@gmail.com" class="contact-link">itsmelesteradalia@gmail.com</a>
+              <div class="contact-row">
+                <a href="mailto:itsmelesteradalia@gmail.com" class="contact-link">itsmelesteradalia@gmail.com</a>
+                <button class="copy-email-btn" type="button" data-copy-email="itsmelesteradalia@gmail.com" title="Copy email address" aria-label="Copy email">
+                  <ion-icon name="copy-outline"></ion-icon>
+                </button>
+              </div>
             </div>
 
           </li>
@@ -139,12 +172,21 @@
 
             <div class="contact-info">
               <p class="contact-title">Resume</p>
-              <a href="./assets/images/resume.pdf" class="contact-link" target="_blank">CV</a>
+              <a href="./assets/images/resume.pdf" class="contact-link" target="_blank">Curriculum Vitae (PDF)</a>
             </div>
 
           </li>
 
         </ul>
+
+        <div class="separator"></div>
+
+        <div class="sidebar-widget-row">
+          <button class="sfx-toggle-btn" type="button" data-sfx-toggle aria-label="Toggle camera shutter sound effects">
+            <ion-icon name="volume-high-outline"></ion-icon>
+            <span data-sfx-text>SFX: ON</span>
+          </button>
+        </div>
 
       </div>
 
@@ -203,23 +245,77 @@
         </header>
 
         <section class="about-intro" aria-label="Professional introduction">
-          <p class="about-eyebrow">IT student · Photographer · Graphic designer</p>
+          <p class="about-eyebrow">BS Information Technology · Photographer · Designer</p>
           <h3>Creative work rooted in photography, design, and technology.</h3>
           <p>
-            I enjoy turning ideas into thoughtful visual stories and useful digital projects.
+            I transform real moments and technical concepts into high-impact visual stories and functional digital experiences.
           </p>
+        </section>
+
+        <!-- Dynamic Metrics Banner -->
+        <section class="metrics-banner" aria-label="Key highlights and impact">
+          <div class="metric-card">
+            <div class="metric-icon"><ion-icon name="camera-outline"></ion-icon></div>
+            <span class="metric-number" data-count="50">50+</span>
+            <span class="metric-label">Events Covered</span>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-icon"><ion-icon name="images-outline"></ion-icon></div>
+            <span class="metric-number" data-count="10000">10K+</span>
+            <span class="metric-label">Frames Captured</span>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-icon"><ion-icon name="people-outline"></ion-icon></div>
+            <span class="metric-number">CICS MSC</span>
+            <span class="metric-label">Council President</span>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-icon"><ion-icon name="ribbon-outline"></ion-icon></div>
+            <span class="metric-number">Honors</span>
+            <span class="metric-label">Consistent Dean's Lister</span>
+          </div>
         </section>
 
         <section class="about-text">
           <p>
-            I am pursuing a Bachelor of Science in Information Technology at Batangas State University – TNEU, Mabini Campus, where I also serve as a student leader in the CICS–Mabini Student Council.
+            I am pursuing a Bachelor of Science in Information Technology at <strong>Batangas State University – TNEU, Mabini Campus</strong>, where I serve as a student leader and President of the CICS–Mabini Student Council.
           </p>
 
           <p>
-            Alongside my studies, I work on photography, graphic design, video, and digital projects, and continue building my skills through hands-on work.
+            Bridging multimedia arts with information systems, I deliver event photography, graphic branding, motion edits, and digital prototypes built with technical discipline and creative passion.
           </p>
         </section>
 
+        <!-- Interactive Before / After Retouch Craft Slider -->
+        <section class="craft-showcase" aria-label="Interactive color grading comparison">
+          <div class="craft-header">
+            <div>
+              <h3 class="h3">Color Grading &amp; Retouch Craft</h3>
+              <p class="craft-subtitle">Drag slider to compare raw sensor capture vs. finalized color grade</p>
+            </div>
+            <span class="craft-badge">Interactive Lens</span>
+          </div>
+
+          <div class="before-after-box" data-before-after>
+            <div class="ba-layer ba-before">
+              <img src="./assets/images/Photographs/IMG_5359-Enhanced-NR.JPG" alt="Fisherman on boat - raw sensor capture" loading="lazy">
+              <span class="ba-tag tag-raw">RAW Sensor Data</span>
+            </div>
+            <div class="ba-layer ba-after">
+              <img src="./assets/images/Photographs/IMG_5359-Enhanced-NR.JPG" alt="Fisherman on boat - color graded & retouched" loading="lazy">
+              <span class="ba-tag tag-graded">Color Graded &amp; Retouched</span>
+            </div>
+            <input type="range" min="0" max="100" value="50" class="ba-slider-input" data-ba-slider aria-label="Slide to compare raw and graded photograph">
+            <div class="ba-divider" aria-hidden="true">
+              <div class="ba-handle">
+                <ion-icon name="swap-horizontal-outline"></ion-icon>
+              </div>
+            </div>
+          </div>
+        </section>
 
         <!--
           - service
@@ -234,16 +330,21 @@
             <li class="service-item">
 
               <div class="service-icon-box">
-                <img src="./assets/images/Untitled-5.png
-                " alt="design icon" width="40">
+                <img src="./assets/images/Untitled-5.png" alt="Photography icon" width="40">
               </div>
 
               <div class="service-content-box">
                 <h4 class="h4 service-item-title">Photography</h4>
 
                 <p class="service-item-text">
-                  Doing photography as a hobby and also as a profession. I do photography for events, portraits, and products.
+                  Professional coverage for university ceremonies, corporate milestones, portraiture, and commercial products with meticulous exposure and natural composition.
                 </p>
+
+                <div class="service-tags">
+                  <span class="service-tag">Event Coverage</span>
+                  <span class="service-tag">Portraiture</span>
+                  <span class="service-tag">Commercial</span>
+                </div>
               </div>
 
             </li>
@@ -251,15 +352,21 @@
             <li class="service-item">
 
               <div class="service-icon-box">
-                <img src="./assets/images/Untitled-6.png" alt="Mouse Click Icon" width="40">
+                <img src="./assets/images/Untitled-6.png" alt="Graphic Design icon" width="40">
               </div>
 
               <div class="service-content-box">
                 <h4 class="h4 service-item-title">Graphic Design</h4>
 
                 <p class="service-item-text">
-                  Editing in High Quality and also creating a design for a product, event, or anything that needs a design.
+                  Crafting high-impact publication materials, official event branding, typography posters, jersey concepts, and modern digital promotional assets.
                 </p>
+
+                <div class="service-tags">
+                  <span class="service-tag">Brand Identity</span>
+                  <span class="service-tag">Poster Art</span>
+                  <span class="service-tag">Apparel Concepts</span>
+                </div>
               </div>
 
             </li>
@@ -267,15 +374,21 @@
             <li class="service-item">
 
               <div class="service-icon-box">
-                <img src="./assets/images/Untitled-4.png" alt="Video edit icon" width="40">
+                <img src="./assets/images/Untitled-4.png" alt="Video editing icon" width="40">
               </div>
 
               <div class="service-content-box">
                 <h4 class="h4 service-item-title">Video Editing</h4>
 
                 <p class="service-item-text">
-                  Creating and editing videos for various purposes, including promotional content, events, and corporate videos.
+                  Dynamic cutting, seamless transitions, rhythm-based pacing, audio sound design, and color grading for promotional reels and organizational highlights.
                 </p>
+
+                <div class="service-tags">
+                  <span class="service-tag">Reels &amp; Highlights</span>
+                  <span class="service-tag">Color Grading</span>
+                  <span class="service-tag">Audio Sync</span>
+                </div>
               </div>
 
             </li>
@@ -283,15 +396,21 @@
             <li class="service-item">
 
               <div class="service-icon-box">
-                <img src="./assets/images/Untitled-3.png" alt="Video edit icon" width="40">
+                <img src="./assets/images/Untitled-3.png" alt="Videography icon" width="40">
               </div>
 
               <div class="service-content-box">
                 <h4 class="h4 service-item-title">Videography</h4>
 
                 <p class="service-item-text">
-                  Shooting videos for various purposes, including events, birthdays and other occasions.
+                  Capturing cinematic footage on location for campus activities, celebratory gatherings, sports tournaments, and recap documentaries.
                 </p>
+
+                <div class="service-tags">
+                  <span class="service-tag">Live Documentation</span>
+                  <span class="service-tag">Cinematic B-Roll</span>
+                  <span class="service-tag">Same-Day Edits</span>
+                </div>
               </div>
 
             </li>
@@ -495,109 +614,153 @@
 
         <section class="skill">
 
-          <h3 class="h3 skills-title">My skills</h3>
+          <h3 class="h3 skills-title">Technical &amp; Creative Competencies</h3>
 
-          <ul class="skills-list content-card">
+          <div class="skills-matrix-grid">
 
-            <li class="skills-item">
-
-              <div class="title-wrapper">
-                <h5 class="h5">Photography</h5>
-                <data value="90">90%</data>
+            <div class="competency-card content-card">
+              <div class="competency-header">
+                <div class="icon-box"><ion-icon name="camera-outline"></ion-icon></div>
+                <h4 class="h4">Photography &amp; Visual Arts</h4>
               </div>
-
-              <div class="skill-progress-bg">
-                <div class="skill-progress-fill" style="width: 90%;"></div>
+              <p class="competency-desc">Mastery over exposure triangle, focal lengths, manual metering, and situational lighting.</p>
+              <div class="competency-tags">
+                <span class="skill-pill">Event Coverage</span>
+                <span class="skill-pill">Portraiture</span>
+                <span class="skill-pill">Commercial Shoots</span>
+                <span class="skill-pill">Manual Metering</span>
+                <span class="skill-pill">Strobe &amp; Ambient Lighting</span>
               </div>
+            </div>
 
-            </li>
-
-            <li class="skills-item">
-
-              <div class="title-wrapper">
-                <h5 class="h5">Videography</h5>
-                <data value="60">60%</data>
+            <div class="competency-card content-card">
+              <div class="competency-header">
+                <div class="icon-box"><ion-icon name="film-outline"></ion-icon></div>
+                <h4 class="h4">Post-Production &amp; Motion</h4>
               </div>
-
-              <div class="skill-progress-bg">
-                <div class="skill-progress-fill" style="width: 60%;"></div>
+              <p class="competency-desc">High-precision color science, dynamic pacing, audio mastering, and typography design.</p>
+              <div class="competency-tags">
+                <span class="skill-pill">Lightroom RAW Grading</span>
+                <span class="skill-pill">Premiere Pro Editing</span>
+                <span class="skill-pill">Photoshop Retouching</span>
+                <span class="skill-pill">CapCut Fast Reels</span>
+                <span class="skill-pill">Audio Soundscapes</span>
               </div>
+            </div>
 
-            </li>
-
-            <li class="skills-item">
-
-              <div class="title-wrapper">
-                <h5 class="h5">Graphic Design</h5>
-                <data value="80">80%</data>
+            <div class="competency-card content-card">
+              <div class="competency-header">
+                <div class="icon-box"><ion-icon name="code-slash-outline"></ion-icon></div>
+                <h4 class="h4">Information Tech &amp; UI/UX</h4>
               </div>
-
-              <div class="skill-progress-bg">
-                <div class="skill-progress-fill" style="width: 80%;"></div>
+              <p class="competency-desc">Bridging visual creativity with computational problem-solving, data visualization, and prototyping.</p>
+              <div class="competency-tags">
+                <span class="skill-pill">Python Scripting</span>
+                <span class="skill-pill">Looker Studio / Data Viz</span>
+                <span class="skill-pill">Figma Prototyping</span>
+                <span class="skill-pill">Web Tech (HTML5/CSS3/JS)</span>
+                <span class="skill-pill">Network Diagnostics</span>
               </div>
+            </div>
 
-            </li>
-
-            <li class="skills-item">
-
-              <div class="title-wrapper">
-                <h5 class="h5">Video Editing</h5>
-                <data value="60">60%</data>
-              </div>
-
-              <div class="skill-progress-bg">
-                <div class="skill-progress-fill" style="width: 60%;"></div>
-              </div>
-
-            </li>
-
-          </ul>
+          </div>
 
         </section>
 
+        <!-- Software Stack -->
         <section class="apps">
 
-          <h3 class="h3 apps-title">Software Used</h3>
+          <div class="apps-header-row">
+            <h3 class="h3 apps-title">Creative Software Suite</h3>
+            <span class="apps-badge">Daily Drivers</span>
+          </div>
 
           <div class="apps-marquee" aria-label="Software used">
             <div class="apps-track">
               <div class="apps-item">
                 <div class="apps-card">
-                  <img src="./assets/images/1.png" alt="CapCut" width="100">
+                  <img src="./assets/images/1.png" alt="CapCut" width="80">
                   <span>CapCut</span>
+                  <small>Reels &amp; Shorts</small>
                 </div>
               </div>
 
               <div class="apps-item">
                 <div class="apps-card">
-                  <img src="./assets/images/2.png" alt="Figma" width="100">
+                  <img src="./assets/images/2.png" alt="Figma" width="80">
                   <span>Figma</span>
+                  <small>UI/UX Design</small>
                 </div>
               </div>
 
               <div class="apps-item">
                 <div class="apps-card">
-                  <img src="./assets/images/3.png" alt="Lightroom" width="100">
+                  <img src="./assets/images/3.png" alt="Lightroom" width="80">
                   <span>Lightroom</span>
+                  <small>RAW Grading</small>
                 </div>
               </div>
 
               <div class="apps-item">
                 <div class="apps-card">
-                  <img src="./assets/images/4.png" alt="Premiere Pro" width="100">
+                  <img src="./assets/images/4.png" alt="Premiere Pro" width="80">
                   <span>Premiere Pro</span>
+                  <small>Video Production</small>
                 </div>
               </div>
 
               <div class="apps-item">
                 <div class="apps-card">
-                  <img src="./assets/images/5.png" alt="Photoshop" width="100">
+                  <img src="./assets/images/5.png" alt="Photoshop" width="80">
                   <span>Photoshop</span>
+                  <small>Compositing</small>
                 </div>
               </div>
             </div>
           </div>
 
+        </section>
+
+        <!-- Hardware & Gear Kit -->
+        <section class="gear-kit-section">
+          <div class="apps-header-row">
+            <h3 class="h3 apps-title">Hardware &amp; Production Gear</h3>
+            <span class="apps-badge">Field Kit</span>
+          </div>
+
+          <div class="gear-grid">
+            <div class="gear-card">
+              <div class="gear-icon"><ion-icon name="camera-outline"></ion-icon></div>
+              <div class="gear-info">
+                <h5>Canon Camera System</h5>
+                <p>High-resolution sensor for crisp low-light event &amp; portrait work</p>
+              </div>
+            </div>
+
+            <div class="gear-card">
+              <div class="gear-icon"><ion-icon name="aperture-outline"></ion-icon></div>
+              <div class="gear-info">
+                <h5>Prime &amp; Zoom Optics</h5>
+                <p>Wide aperture prime lens for rich optical bokeh &amp; subject isolation</p>
+              </div>
+            </div>
+
+            <div class="gear-card">
+              <div class="gear-icon"><ion-icon name="flash-outline"></ion-icon></div>
+              <div class="gear-info">
+                <h5>Strobe &amp; Speedlites</h5>
+                <p>On/off-camera flash with wireless transceivers for events</p>
+              </div>
+            </div>
+
+            <div class="gear-card">
+              <div class="gear-icon"><ion-icon name="hardware-chip-outline"></ion-icon></div>
+              <div class="gear-info">
+                <h5>High-Speed Storage &amp; Backup</h5>
+                <p>UHS-I SD memory &amp; redundant external storage for data security</p>
+              </div>
+            </div>
+          </div>
         </section>
 
       </article>
@@ -616,29 +779,42 @@
 
         <section class="projects">
 
-          <ul class="filter-list">
+          <div class="portfolio-nav-row">
+            <ul class="filter-list">
 
-            <li class="filter-item">
-              <button class="active" data-filter-btn>All</button>
-            </li>
+              <li class="filter-item">
+                <button class="active" data-filter-btn>All</button>
+              </li>
 
-            <li class="filter-item">
-              <button data-filter-btn>Photographs</button>
-            </li>
+              <li class="filter-item">
+                <button data-filter-btn>Photographs</button>
+              </li>
 
-            <li class="filter-item">
-              <button data-filter-btn>Graphic Design</button>
-            </li>
+              <li class="filter-item">
+                <button data-filter-btn>Graphic Design</button>
+              </li>
 
-            <li class="filter-item">
-              <button data-filter-btn>Videos</button>
-            </li>
+              <li class="filter-item">
+                <button data-filter-btn>Videos</button>
+              </li>
 
-            <li class="filter-item">
-              <button data-filter-btn>Side Projects</button>
-            </li>
-            
-          </ul>
+              <li class="filter-item">
+                <button data-filter-btn>Side Projects</button>
+              </li>
+              
+            </ul>
+
+            <div class="view-mode-toggle" role="group" aria-label="Gallery display mode">
+              <button class="view-mode-btn active" data-view-mode="grid" type="button" aria-pressed="true" title="Responsive Grid View">
+                <ion-icon name="grid-outline"></ion-icon>
+                <span>Grid View</span>
+              </button>
+              <button class="view-mode-btn" data-view-mode="drift" type="button" aria-pressed="false" title="3D Drifting Wall View">
+                <ion-icon name="cube-outline"></ion-icon>
+                <span>3D Wall</span>
+              </button>
+            </div>
+          </div>
 
           <div class="filter-select-box">
 
@@ -678,7 +854,7 @@
 
           </div>
 
-          <div class="project-list drift-wall photograph-gallery" data-drift-wall data-photograph-gallery aria-label="Photographs portfolio gallery">
+          <div class="project-list drift-wall photograph-gallery grid-view" data-drift-wall data-photograph-gallery aria-label="Photographs portfolio gallery">
           </div>
 
         </section>
