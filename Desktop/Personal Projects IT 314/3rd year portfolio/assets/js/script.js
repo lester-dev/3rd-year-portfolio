@@ -9,7 +9,11 @@ const sidebarBtn = document.querySelector("[data-sidebar-btn]");
 
 if (sidebarBtn && sidebar) {
   sidebarBtn.addEventListener("click", function () {
-    elementToggleFunc(sidebar);
+    const isExpanded = sidebar.classList.toggle("active");
+    sidebarBtn.setAttribute("aria-expanded", String(isExpanded));
+    sidebarBtn.setAttribute("aria-label", isExpanded ? "Hide contacts" : "Show contacts");
+    const buttonText = sidebarBtn.querySelector("span");
+    if (buttonText) buttonText.textContent = isExpanded ? "Hide Contacts" : "Show Contacts";
   });
 }
 
@@ -49,7 +53,9 @@ const filterBtn = document.querySelectorAll("[data-filter-btn]");
 
 if (select) {
   select.addEventListener("click", function () {
-    elementToggleFunc(this);
+    const isExpanded = !this.classList.contains("active");
+    this.classList.toggle("active", isExpanded);
+    this.setAttribute("aria-expanded", String(isExpanded));
   });
 }
 
@@ -62,6 +68,7 @@ for (let i = 0; i < selectItems.length; i++) {
     }
 
     if (select) elementToggleFunc(select);
+    if (select) select.setAttribute("aria-expanded", "false");
     filterFunc(selectedValue);
   });
 }
@@ -739,17 +746,54 @@ document.addEventListener("keydown", function (event) {
 
 const form = document.querySelector("[data-form]");
 const formInputs = document.querySelectorAll("[data-form-input]");
-const formBtn = document.querySelector("[data-form-btn]");
+const formFeedback = document.querySelector("[data-form-feedback]");
 
-for (let i = 0; i < formInputs.length; i++) {
-  formInputs[i].addEventListener("input", function () {
-    if (!form || !formBtn) return;
-
-    if (form.checkValidity()) {
-      formBtn.removeAttribute("disabled");
-    } else {
-      formBtn.setAttribute("disabled", "");
+formInputs.forEach((input) => {
+  const updateContactForm = () => {
+    if (input.name === "fullname") {
+      input.setCustomValidity(input.value.trim().length >= 2 ? "" : "Please enter your name.");
+    } else if (input.name === "message") {
+      input.setCustomValidity(input.value.trim().length >= 10 ? "" : "Please add at least 10 non-space characters.");
     }
+
+    if (formFeedback) formFeedback.replaceChildren();
+  };
+
+  input.addEventListener("input", updateContactForm);
+  input.addEventListener("change", updateContactForm);
+});
+
+if (form) {
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    if (!form.reportValidity()) return;
+
+    const formData = new FormData(form);
+    const fullName = String(formData.get("fullname")).trim();
+    const email = String(formData.get("email")).trim();
+    const service = String(formData.get("service")).trim();
+    const message = String(formData.get("message")).trim();
+    const subject = `Portfolio inquiry: ${service} - ${fullName}`;
+    const body = [
+      `Name: ${fullName}`,
+      `Email: ${email}`,
+      `Service: ${service}`,
+      "",
+      message
+    ].join("\n");
+    const mailtoUrl = `mailto:itsmelesteradalia@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+    if (formFeedback) {
+      formFeedback.textContent = "Your email app should open with this message ready to review. It will only be sent after you press Send. If it does not open, email ";
+
+      const emailLink = document.createElement("a");
+      emailLink.className = "form-feedback-link";
+      emailLink.href = mailtoUrl;
+      emailLink.textContent = "Lester directly";
+      formFeedback.append(emailLink, ".");
+    }
+
+    window.location.href = mailtoUrl;
   });
 }
 
@@ -768,7 +812,6 @@ for (let i = 0; i < navigationLinks.length; i++) {
       page.classList.toggle("active", page.dataset.page === selectedPage);
     });
 
-    openVideoModal();
     window.scrollTo(0, 0);
   });
 }

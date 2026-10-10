@@ -5,7 +5,9 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Personal Portfolio</title>
+  <meta name="description" content="Explore Lester Adalia's photography, graphic design, video, and digital projects.">
+  <meta name="theme-color" content="#0b0b0c">
+  <title>Lester Adalia | Photography, Design &amp; Digital Projects</title>
 
   <!--
     - favicon
@@ -15,7 +17,7 @@
   <!--
     - custom css link
   -->
-  <link rel="stylesheet" href="./assets/css/style.css?v=20260908-3">
+  <link rel="stylesheet" href="./assets/css/style.css?v=20261010-3">
 
   <!--
     - google font link
@@ -73,7 +75,7 @@
           <p class="title">Photographer</p>
         </div>
 
-        <button class="info_more-btn" data-sidebar-btn>
+        <button class="info_more-btn" data-sidebar-btn aria-label="Show contacts" aria-expanded="false" aria-controls="sidebar-contact-details">
           <span>Show Contacts</span>
 
           <ion-icon name="chevron-down"></ion-icon>
@@ -81,7 +83,7 @@
 
       </div>
 
-      <div class="sidebar-info_more">
+      <div class="sidebar-info_more" id="sidebar-contact-details">
 
         <div class="separator"></div>
 
@@ -144,30 +146,6 @@
 
         </ul>
 
-        <div class="separator"></div>
-
-        <ul class="social-list">
-
-          <li class="social-item">
-            <a href="#" class="social-link">
-              <ion-icon name="logo-facebook"></ion-icon>
-            </a>
-          </li>
-
-          <li class="social-item">
-            <a href="#" class="social-link">
-              <ion-icon name="logo-twitter"></ion-icon>
-            </a>
-          </li>
-
-          <li class="social-item">
-            <a href="#" class="social-link">
-              <ion-icon name="logo-instagram"></ion-icon>
-            </a>
-          </li>
-
-        </ul>
-
       </div>
 
     </aside>
@@ -224,14 +202,21 @@
           <h2 class="h2 article-title">About me</h2>
         </header>
 
+        <section class="about-intro" aria-label="Professional introduction">
+          <p class="about-eyebrow">IT student · Photographer · Graphic designer</p>
+          <h3>Creative work rooted in photography, design, and technology.</h3>
+          <p>
+            I enjoy turning ideas into thoughtful visual stories and useful digital projects.
+          </p>
+        </section>
+
         <section class="about-text">
           <p>
-            Hi! My name is Lester Adalia. I am currently pursuing a Bachelor of Science in Information Technology at Batangas State University – TNEU, Mabini Campus.
-            I am also a student leader in the CICS–Mabini Student Council. I am passionate about learning new things, developing my skills, and exploring new opportunities.
+            I am pursuing a Bachelor of Science in Information Technology at Batangas State University – TNEU, Mabini Campus, where I also serve as a student leader in the CICS–Mabini Student Council.
           </p>
 
           <p>
-            I am a photographer and a graphic designer. I do photography and graphic design as a hobby.
+            Alongside my studies, I work on photography, graphic design, video, and digital projects, and continue building my skills through hands-on work.
           </p>
         </section>
 
@@ -657,9 +642,9 @@
 
           <div class="filter-select-box">
 
-            <button class="filter-select" data-select>
+            <button class="filter-select" data-select aria-expanded="false" aria-controls="portfolio-filter-options">
 
-              <div class="select-value" data-selecct-value>Select category</div>
+              <div class="select-value" data-select-value>Select category</div>
 
               <div class="select-icon">
                 <ion-icon name="chevron-down"></ion-icon>
@@ -667,7 +652,7 @@
 
             </button>
 
-            <ul class="select-list">
+            <ul class="select-list" id="portfolio-filter-options">
 
               <li class="select-item">
                 <button data-select-item>All</button>
@@ -694,169 +679,6 @@
           </div>
 
           <div class="project-list drift-wall photograph-gallery" data-drift-wall data-photograph-gallery aria-label="Photographs portfolio gallery">
-
-            <li class="project-item  active" data-filter-item data-category="web development">
-              <a href="#">
-
-                <figure class="project-img">
-                  <div class="project-item-icon-box">
-                    <ion-icon name="eye-outline"></ion-icon>
-                  </div>
-
-                  <img src="./assets/images/project-1.jpg" alt="finance" loading="lazy">
-                </figure>
-
-                <h3 class="project-title">Finance</h3>
-
-                <p class="project-category">Side P</p>
-
-              </a>
-            </li>
-
-            <li class="project-item  active" data-filter-item data-category="web development">
-              <a href="#">
-
-                <figure class="project-img">
-                  <div class="project-item-icon-box">
-                    <ion-icon name="eye-outline"></ion-icon>
-                  </div>
-
-                  <img src="./assets/images/project-2.png" alt="orizon" loading="lazy">
-                </figure>
-
-                <h3 class="project-title">Orizon</h3>
-
-                <p class="project-category">Side Projects</p>
-
-              </a>
-            </li>
-
-            <li class="project-item  active" data-filter-item data-category="web design">
-              <a href="#">
-
-                <figure class="project-img">
-                  <div class="project-item-icon-box">
-                    <ion-icon name="eye-outline"></ion-icon>
-                  </div>
-
-                  <img src="./assets/images/project-3.jpg" alt="fundo" loading="lazy">
-                </figure>
-
-                <h3 class="project-title">Fundo</h3>
-
-                <p class="project-category">Web design</p>
-
-              </a>
-            </li>
-
-            <li class="project-item  active" data-filter-item data-category="applications">
-              <a href="#">
-
-                <figure class="project-img">
-                  <div class="project-item-icon-box">
-                    <ion-icon name="eye-outline"></ion-icon>
-                  </div>
-
-                  <img src="./assets/images/project-4.png" alt="brawlhalla" loading="lazy">
-                </figure>
-
-                <h3 class="project-title">Brawlhalla</h3>
-
-                <p class="project-category">Applications</p>
-
-              </a>
-            </li>
-
-            <li class="project-item  active" data-filter-item data-category="web design">
-              <a href="#">
-
-                <figure class="project-img">
-                  <div class="project-item-icon-box">
-                    <ion-icon name="eye-outline"></ion-icon>
-                  </div>
-
-                  <img src="./assets/images/project-5.png" alt="dsm." loading="lazy">
-                </figure>
-
-                <h3 class="project-title">DSM.</h3>
-
-                <p class="project-category">Web design</p>
-
-              </a>
-            </li>
-
-            <li class="project-item  active" data-filter-item data-category="web design">
-              <a href="#">
-
-                <figure class="project-img">
-                  <div class="project-item-icon-box">
-                    <ion-icon name="eye-outline"></ion-icon>
-                  </div>
-
-                  <img src="./assets/images/project-6.png" alt="metaspark" loading="lazy">
-                </figure>
-
-                <h3 class="project-title">MetaSpark</h3>
-
-                <p class="project-category">Web design</p>
-
-              </a>
-            </li>
-
-            <li class="project-item  active" data-filter-item data-category="web development">
-              <a href="#">
-
-                <figure class="project-img">
-                  <div class="project-item-icon-box">
-                    <ion-icon name="eye-outline"></ion-icon>
-                  </div>
-
-                  <img src="./assets/images/project-7.png" alt="summary" loading="lazy">
-                </figure>
-
-                <h3 class="project-title">Summary</h3>
-
-                <p class="project-category">Web development</p>
-
-              </a>
-            </li>
-
-            <li class="project-item  active" data-filter-item data-category="applications">
-              <a href="#">
-
-                <figure class="project-img">
-                  <div class="project-item-icon-box">
-                    <ion-icon name="eye-outline"></ion-icon>
-                  </div>
-
-                  <img src="./assets/images/project-8.jpg" alt="task manager" loading="lazy">
-                </figure>
-
-                <h3 class="project-title">Task Manager</h3>
-
-                <p class="project-category">Applications</p>
-
-              </a>
-            </li>
-
-            <li class="project-item  active" data-filter-item data-category="web development">
-              <a href="#">
-
-                <figure class="project-img">
-                  <div class="project-item-icon-box">
-                    <ion-icon name="eye-outline"></ion-icon>
-                  </div>
-
-                  <img src="./assets/images/project-9.png" alt="arrival" loading="lazy">
-                </figure>
-
-                <h3 class="project-title">Arrival</h3>
-
-                <p class="project-category">Web development</p>
-
-              </a>
-            </li>
-
           </div>
 
         </section>
@@ -1077,10 +899,14 @@
           <div class="contact-intro-copy">
             <p class="contact-eyebrow">Let's create something meaningful</p>
             <h3 class="h3">Have a project in mind?</h3>
-            <p>
+            <p class="contact-description">
               Whether you need a photographer for a special event or a creative partner for your next visual project,
               I would love to hear what you are planning.
             </p>
+            <a class="contact-email-cta" href="mailto:itsmelesteradalia@gmail.com">
+              <ion-icon name="mail-outline" aria-hidden="true"></ion-icon>
+              <span>Email me directly</span>
+            </a>
           </div>
         </section>
 
@@ -1091,24 +917,39 @@
           <form action="#" class="form" data-form>
 
             <div class="input-wrapper">
-              <input type="text" name="fullname" class="form-input" placeholder="Full name" required data-form-input>
+              <div class="form-field">
+                <label class="form-label" for="contact-fullname">Full name</label>
+                <input id="contact-fullname" type="text" name="fullname" class="form-input" placeholder="Your name" autocomplete="name" minlength="2" required data-form-input>
+              </div>
 
-              <input type="email" name="email" class="form-input" placeholder="Email address" required data-form-input>
+              <div class="form-field">
+                <label class="form-label" for="contact-email">Email address</label>
+                <input id="contact-email" type="email" name="email" class="form-input" placeholder="you@example.com" autocomplete="email" required data-form-input>
+              </div>
             </div>
 
-            <select name="service" class="form-input" required data-form-input>
-              <option value="" selected disabled>What would you like to hire me for?</option>
-              <option value="photography">Hire me as a photographer</option>
-              <option value="graphic-design">Hire me as a graphic designer</option>
-              <option value="videography">Hire me as a videographer</option>
-              <option value="video-editing">Hire me as a video editor</option>
-            </select>
+            <div class="form-field">
+              <label class="form-label" for="contact-service">What service are you interested in?</label>
+              <select id="contact-service" name="service" class="form-input" required data-form-input>
+                <option value="" selected disabled>Select a service</option>
+                <option value="Photography">Photography</option>
+                <option value="Graphic design">Graphic design</option>
+                <option value="Videography">Videography</option>
+                <option value="Video editing">Video editing</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
 
-            <textarea name="message" class="form-input" placeholder="Your Message" required data-form-input></textarea>
+            <div class="form-field">
+              <label class="form-label" for="contact-message">Tell me about your project</label>
+              <textarea id="contact-message" name="message" class="form-input" placeholder="Share a few details, including dates or deadlines if you have them." minlength="10" required data-form-input></textarea>
+            </div>
 
-            <button class="form-btn" type="submit" disabled data-form-btn>
+            <p class="form-feedback" data-form-feedback role="status" aria-live="polite"></p>
+
+            <button class="form-btn" type="submit" data-form-btn>
               <ion-icon name="paper-plane"></ion-icon>
-              <span>Send Message</span>
+              <span>Prepare Email</span>
             </button>
 
           </form>
@@ -1129,7 +970,7 @@
   <!--
     - custom js link
   -->
-  <script src="./assets/js/script.js?v=20261010-1"></script>
+  <script src="./assets/js/script.js?v=20261010-3"></script>
 
   <!--
     - ionicon link
