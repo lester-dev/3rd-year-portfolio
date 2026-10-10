@@ -353,6 +353,17 @@ const portfolioEntries = [
   }))
 ];
 
+const portfolioImageObserver = new IntersectionObserver((entries, observer) => {
+  entries.forEach((entry) => {
+    if (!entry.isIntersecting) return;
+
+    const image = entry.target;
+    image.src = image.dataset.src;
+    delete image.dataset.src;
+    observer.unobserve(image);
+  });
+}, { rootMargin: "400px 0px" });
+
 if (photographGallery) {
   photographGallery.replaceChildren();
 
@@ -389,15 +400,19 @@ if (photographGallery) {
     figure.className = "project-img";
     icon.className = "project-item-icon-box";
     iconElement.setAttribute("name", "eye-outline");
-    media.src = entry.src;
     if (entry.kind === "video") {
       media.controls = true;
-      media.preload = "metadata";
+      media.preload = "none";
       media.playsInline = true;
       media.setAttribute("aria-label", entry.fileName);
     } else {
       media.alt = entry.fileName;
-      media.loading = "eager";
+      media.loading = "lazy";
+      media.decoding = "async";
+      media.dataset.src = entry.src;
+    }
+    if (entry.kind === "video") {
+      media.src = entry.src;
     }
     title.className = "project-title";
     title.textContent = displayName;
@@ -409,6 +424,9 @@ if (photographGallery) {
     card.append(figure, title, category);
     item.appendChild(card);
     photographGallery.appendChild(item);
+    if (entry.kind !== "video") {
+      portfolioImageObserver.observe(media);
+    }
   });
 }
 
@@ -455,42 +473,74 @@ driftWalls.forEach((wall) => {
   if (isPhotographWall) {
     const offsets = columns.map(() => 0);
     let lastTimestamp = null;
+    let animationFrameId = null;
+    let isWallInView = false;
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
     columns.forEach((track) => {
       track.style.animation = "none";
     });
 
     const animatePhotographs = (timestamp) => {
+      animationFrameId = null;
+      if (!isWallInView || document.visibilityState !== "visible" || prefersReducedMotion.matches) {
+        lastTimestamp = null;
+        return;
+      }
+
       if (lastTimestamp === null) lastTimestamp = timestamp;
       const delta = Math.min(0.05, (timestamp - lastTimestamp) / 1000);
       lastTimestamp = timestamp;
-      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-      if (!reducedMotion) {
-        columns.forEach((track, index) => {
-          const item = track.firstElementChild;
-          if (!item) return;
+      columns.forEach((track, index) => {
+        const item = track.firstElementChild;
+        if (!item) return;
 
-          const itemHeight = item.getBoundingClientRect().height;
-          const direction = index % 2 === 0 ? 1 : -1;
-          offsets[index] += 32 * delta * direction;
+        const itemHeight = item.getBoundingClientRect().height;
+        const direction = index % 2 === 0 ? 1 : -1;
+        offsets[index] += 32 * delta * direction;
 
-          if (direction > 0 && offsets[index] >= itemHeight) {
-            track.appendChild(item);
-            offsets[index] -= itemHeight;
-          } else if (direction < 0 && offsets[index] <= -itemHeight) {
-            track.insertBefore(track.lastElementChild, track.firstElementChild);
-            offsets[index] += itemHeight;
-          }
+        if (direction > 0 && offsets[index] >= itemHeight) {
+          track.appendChild(item);
+          offsets[index] -= itemHeight;
+        } else if (direction < 0 && offsets[index] <= -itemHeight) {
+          track.insertBefore(track.lastElementChild, track.firstElementChild);
+          offsets[index] += itemHeight;
+        }
 
-          track.style.transform = `translate3d(0, ${-offsets[index]}px, 0)`;
-        });
-      }
+        track.style.transform = `translate3d(0, ${-offsets[index]}px, 0)`;
+      });
 
-      requestAnimationFrame(animatePhotographs);
+      animationFrameId = requestAnimationFrame(animatePhotographs);
     };
 
-    requestAnimationFrame(animatePhotographs);
+    const stopPhotographAnimation = () => {
+      if (animationFrameId !== null) {
+        cancelAnimationFrame(animationFrameId);
+        animationFrameId = null;
+      }
+      lastTimestamp = null;
+    };
+
+    const syncPhotographAnimation = () => {
+      if (!isWallInView || document.visibilityState !== "visible" || prefersReducedMotion.matches) {
+        stopPhotographAnimation();
+        return;
+      }
+
+      if (animationFrameId === null) {
+        animationFrameId = requestAnimationFrame(animatePhotographs);
+      }
+    };
+
+    const wallObserver = new IntersectionObserver((entries) => {
+      isWallInView = entries.some((entry) => entry.isIntersecting);
+      syncPhotographAnimation();
+    });
+
+    wallObserver.observe(wall);
+    document.addEventListener("visibilitychange", syncPhotographAnimation);
+    prefersReducedMotion.addEventListener("change", syncPhotographAnimation);
   }
 
   wall.addEventListener("pointermove", (event) => {
@@ -534,10 +584,11 @@ const openProjectModal = function (item) {
   const image = item.querySelector(".project-img img");
   const title = item.querySelector(".project-title");
   const category = item.querySelector(".project-category");
+  const imageSource = image && (image.currentSrc || image.dataset.src);
 
-  if (!image || !title || !category) return;
+  if (!image || !imageSource || !title || !category) return;
 
-  projectModalImage.src = image.src;
+  projectModalImage.src = imageSource;
   projectModalImage.alt = image.alt;
   projectModalTitle.textContent = item.dataset.fileName || title.textContent.trim();
   projectModalCategory.textContent = category.textContent.trim();
