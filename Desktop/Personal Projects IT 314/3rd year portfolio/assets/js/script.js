@@ -272,6 +272,7 @@ const sideProjectImages = [
   "Data Visualization For Restaurant.png",
   "Python Fare Calculation.png",
   "Sales Report Dashboard.png",
+  "Simple Finance Tracker.png",
   "UIUX Pharmacy System.png",
   "Wifi Signal Strength Simulator.png"
 ];
@@ -286,6 +287,10 @@ const sideProjectDetails = {
   },
   "Sales Report Dashboard.png": {
     description: "A data visualization insights for the Sales of the Company"
+  },
+  "Simple Finance Tracker.png": {
+    description: "Project link:",
+    descriptionUrl: "https://finance-tracker-try.vercel.app/"
   },
   "UIUX Pharmacy System.png": {
     description: "Project link:",
